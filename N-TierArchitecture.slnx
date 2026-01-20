@@ -1,5 +1,5 @@
 <Solution>
   <Project Path="App.API/App.API.csproj" />
-  <Project Path="App.Repositeries/App.Repositeries.csproj" />
+  <Project Path="App.Repositories/App.Repositories.csproj" Id="5063d215-4d92-43d2-928c-37b7cea23cd4" />
   <Project Path="App.Services/App.Services.csproj" />
 </Solution>

@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace App.Repositeries.Data
+{
+    public class ConnectionStringOption
+    {
+        public   string SqlServer { get; set; }
+
+        public const string Key = "ConnectionStrings"; //sabit
+
+
+    }
+}
