@@ -7,6 +7,8 @@ namespace App.Repositories.Concrete.EntityFramework
 {
     public class EfGenericRepository<T>(AppDbContext context) : IGenericRepository<T> where T : class
     {
+        protected AppDbContext Context = context;
+
         private readonly DbSet<T> _dbSet = context.Set<T>();
 
        public IQueryable<T> GetAll() => _dbSet.AsQueryable();

@@ -1,4 +1,6 @@
-﻿using App.Repositories.Data;
+﻿using App.Repositories.Concrete.EntityFramework;
+using App.Repositories.Data;
+using App.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +25,9 @@ namespace App.Repositories.Extensions
                 });
             });
 
+            services.AddScoped<IProducRepository , ProductRepository>();
+            services.AddScoped(typeof(IGenericRepository<>), typeof(EfGenericRepository<>));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;
         }
