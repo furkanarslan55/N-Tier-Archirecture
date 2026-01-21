@@ -8,7 +8,7 @@ namespace App.Repositories.Data
 {
     public class ConnectionStringOption
     {
-        public string SqlServer { get; set; }
+        public string SqlServer { get; set; } = null!;
         public const string Key = "ConnectionStrings"; //sabit
     }
 }

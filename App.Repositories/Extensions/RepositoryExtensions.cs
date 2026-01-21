@@ -4,6 +4,7 @@ using App.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace App.Repositories.Extensions
 {
@@ -11,27 +12,24 @@ namespace App.Repositories.Extensions
     {
 
 
-        public static IServiceCollection AddRepositories(this IServiceCollection services ,IConfiguration configuration)
+        public static IServiceCollection AddRepositories(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<AppDbContext>(options =>
+            services.AddDbContext<AppDbContext>((sp, options) =>
             {
-                var connectionStrings = configuration.GetSection(ConnectionStringOption.Key).Get<ConnectionStringOption>();
+                var conn = sp.GetRequiredService<IOptions<ConnectionStringOption>>().Value;
 
-                options.UseSqlServer(connectionStrings!.SqlServer, sqlServerOptionsAction =>
+                options.UseSqlServer(conn.SqlServer, sql =>
                 {
-
-                    sqlServerOptionsAction.MigrationsAssembly(typeof(RepositoryAssembly).Assembly.FullName);
-
+                    sql.MigrationsAssembly(typeof(RepositoryAssembly).Assembly.FullName);
                 });
             });
 
-            services.AddScoped<IProducRepository , ProductRepository>();
+            services.AddScoped<IProducRepository, ProductRepository>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(EfGenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;
         }
-
 
 
 

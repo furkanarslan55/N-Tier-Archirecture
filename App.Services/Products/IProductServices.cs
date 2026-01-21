@@ -9,8 +9,11 @@ namespace App.Services.Products
 {
     public interface IProductServices
     {
-        Task<ServiceResult<List<Product>>> GetTopPriceProductsAsync(int count);
-
-        Task<ServiceResult<Product>>GetProductByIdAsync(int id);
+        Task<ServiceResult<List<ProductDto>>> GetTopPriceProductsAsync(int count);
+        Task<ServiceResult< List<ProductDto>>> GetAllList();
+        Task<ServiceResult<ProductDto?>>GetByIdAsync(int id);
+        Task<ServiceResult<CreateProductResponse>> CreateProductAsync(CreateProductRequest request);
+        Task<ServiceResult> UpdateProductAsync(int id, UpdateProductRequest request);
+        Task<ServiceResult> DeleteProductAsync(int id);
     }
 }
