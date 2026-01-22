@@ -20,6 +20,9 @@ namespace App.Services
 
         public HttpStatusCode Status { get; set; }
 
+
+        public string? UrlAsCreated { get; set; }
+
         //static factory method
         public static ServiceResult<T> Success(T data, HttpStatusCode status = HttpStatusCode.OK)
         {
@@ -34,6 +37,26 @@ namespace App.Services
 
 
         }
+
+        public static ServiceResult<T> SuccessAsCreated(T data, string UrlAsCreated)
+        {
+
+            return new ServiceResult<T>()
+            {
+                Data = data,
+                Status = HttpStatusCode.Created,
+                UrlAsCreated = UrlAsCreated
+            };
+
+
+
+
+        }
+
+
+
+
+
 
         public static ServiceResult<T> Fail(List<string> errorMessage, HttpStatusCode status = HttpStatusCode.BadRequest)
         {

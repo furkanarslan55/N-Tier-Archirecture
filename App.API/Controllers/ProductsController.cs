@@ -1,4 +1,6 @@
 ﻿using App.Services.Products;
+using App.Services.Products.Create;
+using App.Services.Products.Update;
 using Microsoft.AspNetCore.Mvc;
 
 namespace App.API.Controllers
@@ -20,6 +22,14 @@ namespace App.API.Controllers
 
             return CreateActionResult(serviceresult);
         }
+        [HttpGet("{pageNumber:int}/{pageSize:int}")] //constraint ekledik int olmalı diye
+        public async Task<IActionResult> GetPagedAll(int pageNumber ,int pageSize)
+        {
+            var serviceresult = await _productServices.GetPagedAllList(pageNumber ,pageSize);
+
+
+            return CreateActionResult(serviceresult);
+        }
 
         [HttpGet("{id}")]  // bu datayı artık query stringde değil route üzerinden alacağız.
 
@@ -33,6 +43,15 @@ namespace App.API.Controllers
 
 
         }
+
+       
+
+
+
+
+
+
+
         [HttpPost]
         public async Task<IActionResult> Create(CreateProductRequest request)
         {
@@ -40,13 +59,30 @@ namespace App.API.Controllers
             return CreateActionResult(serviceresult);
 
         }
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
 
         public async Task<IActionResult> Update( int id,UpdateProductRequest request)
         {
             var serviceresult = await _productServices.UpdateProductAsync(id,request);
             return CreateActionResult(serviceresult);
         }
+
+
+
+        [HttpPatch("stock")] //parçalı güncelleme 
+        public async Task<IActionResult> UpdateStock(int id, int quantity)
+        {
+            var serviceresult = await _productServices.UpdateStockAsync(id, quantity);
+            return CreateActionResult(serviceresult);
+        }
+
+
+
+
+
+
+
+
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {

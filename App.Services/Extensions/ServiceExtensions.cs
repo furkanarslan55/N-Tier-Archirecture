@@ -1,8 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using App.Services.Products;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using App.Services.Products;
-
-using App.Services.Products;
+using System.Reflection;
 
 namespace App.Services.Extensions
 {
@@ -14,7 +15,9 @@ namespace App.Services.Extensions
         public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IProductServices, ProductService>();
-
+            services.AddFluentValidationAutoValidation();
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly()); // validasyonları ekliyoruz
+            services.AddAutoMapper(Assembly.GetExecutingAssembly()); // mapping profillerini ekliyoruz
             return services;
         }
 
