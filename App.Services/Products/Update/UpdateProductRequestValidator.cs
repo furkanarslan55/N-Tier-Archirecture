@@ -1,11 +1,15 @@
 ﻿using FluentValidation;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace App.Services.Products.Create
+namespace App.Services.Products.Update
 {
-    public class CreateProductRequestValidator :AbstractValidator<CreateProductRequest>
+    public class UpdateProductRequestValidator :AbstractValidator<UpdateProductRequest>
     {
-
-        public CreateProductRequestValidator()
+        public UpdateProductRequestValidator()
         {
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Product name is required.")
@@ -14,12 +18,10 @@ namespace App.Services.Products.Create
                 .GreaterThan(0).WithMessage("Price must be greater than zero.");
             RuleFor(x => x.Stock)
                 .GreaterThanOrEqualTo(0).WithMessage("Stock cannot be negative.");
-
             RuleFor(x => x.CategoryId).GreaterThan(0).WithMessage("CategoryId must be a positive integer.");
         }
 
 
 
-
-    }
+    }  
 }

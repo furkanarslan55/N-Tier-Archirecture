@@ -21,7 +21,9 @@ namespace App.Services.Products
         public async Task<ServiceResult <List<ProductDto>>> GetTopPriceProductsAsync(int count)
         {
             var products = await producRepository.GetTopPriceProductsAsync(count);
-            var ProductDto = products.Select(p => new ProductDto(p.Id, p.Name, p.Price, p.Stock)).ToList();
+    
+
+            var ProductDto = mapper.Map<List<ProductDto>>(products);
 
             return new  ServiceResult <List<ProductDto >> ()
             {
@@ -87,16 +89,12 @@ namespace App.Services.Products
 
 
 
-            var newProduct = new Product
-            {
-                Name = request.Name,
-                Price = request.Price,
-                Stock = request.Stock
-            };
-            await producRepository.AddAsync(newProduct);
+         var product = mapper.Map<Product>(request);
+
+            await producRepository.AddAsync(product);
             await unitOfWork.SaveChangesAsync();
-            var response = new CreateProductResponse(newProduct.Id);
-            return ServiceResult<CreateProductResponse>.SuccessAsCreated(response,$"api/products/{newProduct.Id}");
+            var response = new CreateProductResponse(product.Id);
+            return ServiceResult<CreateProductResponse>.SuccessAsCreated(response,$"api/products/{product.Id}");
         }
 
       public async Task<ServiceResult> UpdateProductAsync (int id,UpdateProductRequest request)
@@ -109,9 +107,19 @@ namespace App.Services.Products
             {
                 return ServiceResult.Fail("Product not found", HttpStatusCode.NotFound);
             }
-            product.Name = request.Name;
-            product.Price = request.Price;
-            product.Stock = request.Stock;
+            var iSProductNameExist = await producRepository.Where(x => x.Name == request.Name && x.Id !=product.Id).AnyAsync(); //güncelleme yaparken ürün ismi kendi ismiyle çakışmasın diye böyle bir kontrol yapıyoruz.
+            if (iSProductNameExist)
+            {
+                return ServiceResult.Fail("Ürün ismi mevcuttur.", HttpStatusCode.BadRequest);
+            }
+
+
+
+            //product.Name = request.Name;
+            //product.Price = request.Price;
+            //product.Stock = request.Stock;
+
+            product =mapper.Map(request,product); // AutoMapper ile de yapabiliriz.
 
             producRepository.UpdateAsync(product);
             await unitOfWork.SaveChangesAsync();
